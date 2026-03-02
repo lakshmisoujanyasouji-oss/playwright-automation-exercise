@@ -1,0 +1,25 @@
+import { test, expect } from '@playwright/test';
+import { LoginPage } from '../../pages/loginPage';
+
+test.describe('Login Feature', () => {
+
+    // Test 1 - Valid Login
+    test('TC001 - Login with valid credentials', async ({ page }) => {
+        const loginPage = new LoginPage(page);
+        await loginPage.navigateToLoginPage();
+        await loginPage.login('lakshmisoujanyasouji@gmail.com', 'Souki@0507');
+        // Verify user is logged in
+        await expect(page).toHaveURL('https://www.automationexercise.com/');
+        await expect(page.locator('a[href="/logout"]')).toBeVisible();
+    });
+
+    // Test 2 - Invalid Login
+    test('TC002 - Login with invalid credentials', async ({ page }) => {
+        const loginPage = new LoginPage(page);
+        await loginPage.navigateToLoginPage();
+        await loginPage.login('invalid@gmail.com', 'wrongpassword');
+        // Verify error message is displayed
+        await expect(page.locator('p:has-text("Your email or password is incorrect!")')).toBeVisible();
+    });
+
+});

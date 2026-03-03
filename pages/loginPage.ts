@@ -18,10 +18,10 @@ export class LoginPage {
         this.errorMessage = page.locator('p:has-text("Your email or password is incorrect!")');
     }
 
-    // Navigate to login page
-    async expectInvalidCredentialsError(): Promise<void> {
-  await expect(this.errorMessage).toBeVisible();
-}
+      // Navigate to login page
+    async goto(): Promise<void> {
+        await this.page.goto('/login');
+    }
 
     // Login method
     async login(email: string, password: string) {
@@ -29,4 +29,9 @@ export class LoginPage {
         await this.passwordInput.fill(password);
         await this.loginButton.click();
     }
+
+    // Verify invalid login error message
+    async expectInvalidCredentialsError(): Promise<void> {
+  await expect(this.errorMessage).toBeVisible();
+}
 }

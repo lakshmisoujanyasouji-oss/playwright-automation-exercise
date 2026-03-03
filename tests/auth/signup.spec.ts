@@ -1,35 +1,42 @@
-import { Page, Locator, expect } from "@playwright/test";
+import { test } from "@playwright/test";
+import { SignupPage } from "../../pages/signupPage";
+import { AccountPage } from "../../pages/accountPage";
+import { LoginPage } from "../../pages/loginPage";
+import { buildUser } from "../../fixtures/userFactory";
 
-export class LoginPage {
-  // Page locators
-  readonly page: Page;
-  readonly emailInput: Locator;
-  readonly passwordInput: Locator;
-  readonly loginButton: Locator;
-  readonly errorMessage: Locator;
+test.describe("Signup Feature", () => {
 
-  constructor(page: Page) {
-    this.page = page;
-    this.emailInput = page.locator('[data-qa="login-email"]');
-    this.passwordInput = page.locator('[data-qa="login-password"]');
-    this.loginButton = page.locator('[data-qa="login-button"]');
-    this.errorMessage = page.locator('p:has-text("Your email or password is incorrect!")');
-  }
+  test("TC003 - User can register, delete account and verify deletion", async ({ page }) => {
+    const signupPage = new SignupPage(page);
+    const accountPage = new AccountPage(page);
+    const loginPage = new LoginPage(page);
+    const user = buildUser();
 
-  // Navigate to login page (uses baseURL from playwright.config.ts)
-  async goto(): Promise<void> {
-    await this.page.goto("/login");
-  }
+    // Step 1: Navigate to signup page
+    await signupPage.goto();
 
-  // Login method
-  async login(email: string, password: string): Promise<void> {
-    await this.emailInput.fill(email);
-    await this.passwordInput.fill(password);
-    await this.loginButton.click();
-  }
+    // Step 2: Start signup
+    await signupPage.startSignup(user.name, user.email!);
 
-  // Verify invalid login error message
-  async expectInvalidCredentialsError(): Promise<void> {
-    await expect(this.errorMessage).toBeVisible();
-  }
-}
+    // Step 3: Complete registration form
+    await signupPage.completeSignup(user);
+
+    // Step 4: Verify account created
+    await signupPage.expectAccountCreated();
+
+    // Step 5: Move to logged-in state
+    await signupPage.clickContinue();
+
+    // Step 6: Delete account (cleanup)
+    await accountPage.deleteAccount();
+    await accountPage.expectAccountDeleted();
+    await accountPage.clickContinue();
+
+    // Step 7: Verify account really deleted by attempting login again
+    await page.context().clearCookies(); // ensures fresh login attempt
+    await loginPage.goto();
+    await loginPage.login(user.email!, user.password);
+    await loginPage.expectInvalidCredentialsError();
+  });
+
+});

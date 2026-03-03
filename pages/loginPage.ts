@@ -1,5 +1,5 @@
 
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from "@playwright/test";
 
 export class LoginPage {
     
@@ -19,9 +19,9 @@ export class LoginPage {
     }
 
     // Navigate to login page
-    async navigateToLoginPage() {
-        await this.page.goto('https://www.automationexercise.com/login');
-    }
+    async expectInvalidCredentialsError(): Promise<void> {
+  await expect(this.errorMessage).toBeVisible();
+}
 
     // Login method
     async login(email: string, password: string) {

@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+const isCI = !!process.env.CI;
 
 /**
  * Read environment variables from file.
@@ -30,15 +31,21 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
     baseURL: 'https://www.automationexercise.com',
-    
-    headless: false,  // browser visible while running tests
+    // browser visible while running tests
+    //headless: false
+
+    // Run browser in visible mode locally for debugging.
+    // Automatically switch to headless mode in CI for faster and stable execution.
+
+    headless: isCI,  
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },
 
   /* Configure projects for major browsers */
-  projects: [
+  projects: isCI
+  ? [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
@@ -53,6 +60,12 @@ export default defineConfig({
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
+  ]
+  :[{
+          name: "chromium",
+          use: { ...devices["Desktop Chrome"] },
+        },
+      ],
 
     /* Test against mobile viewports. */
     // {
@@ -73,7 +86,6 @@ export default defineConfig({
     //   name: 'Google Chrome',
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
-  ],
 
   /* Run your local dev server before starting the tests */
   // webServer: {

@@ -9,6 +9,7 @@ export class LoginPage {
     readonly passwordInput: Locator;
     readonly loginButton: Locator;
     readonly errorMessage: Locator;
+    readonly logoutButton: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -16,6 +17,7 @@ export class LoginPage {
         this.passwordInput = page.locator('[data-qa="login-password"]');
         this.loginButton = page.locator('[data-qa="login-button"]');
         this.errorMessage = page.locator('p:has-text("Your email or password is incorrect!")');
+        this.logoutButton = page.locator('a[href="/logout"]');
     }
 
       // Navigate to login page
@@ -32,6 +34,16 @@ export class LoginPage {
 
     // Verify invalid login error message
     async expectInvalidCredentialsError(): Promise<void> {
-  await expect(this.errorMessage).toBeVisible();
+    await expect(this.errorMessage).toBeVisible();
+    }
+    // Logout method
+    async logout(): Promise<void> {
+    await this.logoutButton.click();
+    }
+    // To verify logout - redirected to login page
+    async expectLoggedOut(): Promise<void> {
+    await expect(this.page).toHaveURL('/login');
+    await expect(this.logoutButton).not.toBeVisible();
 }
 }
+

@@ -7,7 +7,10 @@ test.describe('Login Feature', () => {
     test('TC001 - Login with valid credentials', async ({ page }) => {
         const loginPage = new LoginPage(page);
         await loginPage.goto();
-        await loginPage.login('lakshmisoujanyasouji@gmail.com', 'Souki@0507');
+        await loginPage.login(
+            process.env.TEST_EMAIL!,
+            process.env.TEST_PASSWORD!
+        );
         // Verify user is logged in
         await expect(page).toHaveURL('https://www.automationexercise.com/');
         await expect(page.locator('a[href="/logout"]')).toBeVisible();

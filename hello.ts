@@ -120,9 +120,10 @@
 
    class Company
    {
-    salary() : void
+    getSalary() : number
     {
     console.log("My company has good salaries");
+    return 70000;
     }
    }
    class Tester extends Company
@@ -133,6 +134,6 @@
       }
     }
    const e = new Tester();
-   e.salary();
+   e.getSalary();
    e.work();
   

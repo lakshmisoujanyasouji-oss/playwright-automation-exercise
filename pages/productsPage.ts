@@ -1,15 +1,15 @@
-import { Page, Locator, expect } from "@playwright/test";
+import { Locator, expect } from '@playwright/test';
+import { BasePage } from './BasePage';
 
-export class ProductsPage {
+export class ProductsPage extends BasePage {
 
     // Locators
-    readonly page: Page;
     readonly searchInput: Locator;
     readonly searchButton: Locator;
     readonly productResults: Locator;
 
-    constructor(page: Page) {
-        this.page = page;
+    constructor(page: any) {
+        super(page);
         this.searchInput = page.locator('#search_product');
         this.searchButton = page.locator('#submit_search');
         this.productResults = page.locator('.productinfo p');
@@ -17,7 +17,7 @@ export class ProductsPage {
 
     // Navigate to products page
     async goto(): Promise<void> {
-        await this.page.goto('/products');
+        await super.goto('/products');
     }
 
     // Search for a product

@@ -1,13 +1,13 @@
-import { Page, Locator, expect } from "@playwright/test";
+import { Locator, expect } from '@playwright/test';
+import { BasePage } from './BasePage';
 
-export class AccountPage {
-  readonly page: Page;
+export class AccountPage extends BasePage {
   readonly deleteAccountLink: Locator;
   readonly accountDeletedMessage: Locator;
   readonly continueButton: Locator;
 
-  constructor(page: Page) {
-    this.page = page;
+  constructor(page: any) {
+    super(page);
     this.deleteAccountLink = page.locator('a[href="/delete_account"]');
     this.accountDeletedMessage = page.locator('h2:has-text("Account Deleted!")');
     this.continueButton = page.locator('[data-qa="continue-button"]');

@@ -1,18 +1,18 @@
 
 import { Page, Locator, expect } from "@playwright/test";
+import { BasePage } from './BasePage';
 
-export class LoginPage {
+export class LoginPage extends BasePage {
     
     // Page locators
-    readonly page: Page;
     readonly emailInput: Locator;
     readonly passwordInput: Locator;
     readonly loginButton: Locator;
     readonly errorMessage: Locator;
     readonly logoutButton: Locator;
 
-    constructor(page: Page) {
-        this.page = page;
+    constructor(page: any) {
+        super(page);
         this.emailInput = page.locator('[data-qa="login-email"]');
         this.passwordInput = page.locator('[data-qa="login-password"]');
         this.loginButton = page.locator('[data-qa="login-button"]');
@@ -22,7 +22,7 @@ export class LoginPage {
 
       // Navigate to login page
     async goto(): Promise<void> {
-        await this.page.goto('/login');
+        await super.goto('/login');;
     }
 
     // Login method

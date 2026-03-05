@@ -1,8 +1,8 @@
-import { Page, Locator, expect } from "@playwright/test";
+import { Locator, expect } from '@playwright/test';
+import { BasePage } from './BasePage';
 import { IUser } from "../interfaces/IUser";
 
-export class SignupPage {
-  readonly page: Page;
+export class SignupPage extends BasePage {
 
   readonly nameInput: Locator;
   readonly emailInput: Locator;
@@ -26,8 +26,8 @@ export class SignupPage {
   readonly accountCreatedMessage: Locator;
   readonly continueButton: Locator;
 
-  constructor(page: Page) {
-    this.page = page;
+  constructor(page: any) {
+    super(page);
 
     // Initial signup
     this.nameInput = page.locator('[data-qa="signup-name"]');
@@ -55,7 +55,7 @@ export class SignupPage {
   }
 
   async goto(): Promise<void> {
-    await this.page.goto("/login");
+    await super.goto('/login');
   }
 
   async startSignup(name: string, email: string): Promise<void> {

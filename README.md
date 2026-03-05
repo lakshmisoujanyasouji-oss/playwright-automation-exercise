@@ -12,7 +12,23 @@
 
 A personal end-to-end (E2E) test automation framework built with **Playwright** and **TypeScript**, targeting the publicly available practice e-commerce site [AutomationExercise.com](https://automationexercise.com) — a full-fledged website purpose-built for automation engineers to sharpen their skills.
 
-This project demonstrates professional-grade automation practices including the **Page Object Model (POM)** design pattern, **data-driven testing**, **API testing**, and a fully integrated **CI/CD pipeline** via GitHub Actions.
+This project demonstrates professional-grade automation practices including the **Page Object Model (POM)** design pattern, **data-driven testing**, **TypeScript interfaces**, **environment variable management**, and a fully integrated **CI/CD pipeline** via GitHub Actions.
+
+---
+
+## 🏗️ Framework Architecture
+
+```
+Test Layer (*.spec.ts)
+        ↓
+Page Object Layer (pages/)
+        ↓
+Interfaces & Fixtures (interfaces/ + fixtures/)
+        ↓
+Playwright Engine
+        ↓
+CI Pipeline (GitHub Actions)
+```
 
 ---
 
@@ -25,7 +41,22 @@ This project demonstrates professional-grade automation practices including the 
 | [Node.js](https://nodejs.org/) | Runtime environment |
 | [GitHub Actions](https://github.com/features/actions) | CI/CD pipeline |
 | [dotenv](https://www.npmjs.com/package/dotenv) | Environment variable management |
-| [Allure / Playwright HTML Reporter](https://playwright.dev/docs/test-reporters) | Test reporting |
+| [Playwright HTML Reporter](https://playwright.dev/docs/test-reporters) | Test reporting |
+
+---
+
+## 🎯 Automation Strategy
+
+The framework focuses on maintaining stable automation suites that provide fast feedback during development.
+
+Key principles:
+- Prioritize business-critical workflows for automation
+- Use **Page Object Model** to maintain separation of concerns
+- Keep tests **deterministic and independent**
+- Use **TypeScript interfaces** for type-safe test data
+- Use **JSON fixtures** for data-driven testing
+- Protect credentials using **environment variables**
+- Integrate automated regression into **CI pipelines**
 
 ---
 
@@ -33,24 +64,32 @@ This project demonstrates professional-grade automation practices including the 
 
 ```
 playwright-automation-exercise/
+├── .github/
+│   └── workflows/
+│       └── playwright.yml      # CI/CD pipeline
 ├── tests/
-│   ├── auth/               # Login, register, logout tests
-│   ├── products/           # Product search, filtering, details
-│   ├── cart/               # Add to cart, remove, quantities
-│   ├── checkout/           # Order placement and payment flow
-│   └── api/                # API test cases
-├── pages/                  # Page Object Models (POM)
-│   ├── HomePage.ts
-│   ├── LoginPage.ts
-│   ├── ProductsPage.ts
-│   ├── CartPage.ts
-│   └── CheckoutPage.ts
-├── fixtures/               # Test data (JSON)
-│   └── users.json
-├── utils/                  # Helpers and shared utilities
-│   └── helpers.ts
-├── .env.example            # Environment variable template
-├── playwright.config.ts    # Playwright configuration
+│   ├── auth/                   # Login, register, logout tests
+│   │   ├── login.spec.ts
+│   │   ├── logout.spec.ts
+│   │   └── signup.spec.ts
+│   ├── products/               # Product search tests
+│   │   └── products.spec.ts
+│   ├── cart/                   # Add to cart, remove (coming soon)
+│   ├── checkout/               # Order placement (coming soon)
+│   └── api/                    # API test cases (coming soon)
+├── pages/                      # Page Object Models (POM)
+│   ├── loginPage.ts
+│   ├── signupPage.ts
+│   ├── accountPage.ts
+│   └── productsPage.ts
+├── interfaces/                 # TypeScript interfaces
+│   └── IUser.ts                # User data contract
+├── fixtures/                   # Test data
+│   ├── userFactory.ts          # Dynamic user data generator
+│   └── products.json           # Product search terms
+├── utils/                      # Helpers and shared utilities
+├── .env.example                # Environment variable template
+├── playwright.config.ts        # Playwright configuration
 ├── tsconfig.json
 └── README.md
 ```
@@ -61,34 +100,29 @@ playwright-automation-exercise/
 
 ### ✅ UI Test Cases
 
-| # | Test Case | Status |
-|---|---|---|
-| 1 | Register new user | ✅ |
-| 2 | Login with valid credentials | ✅ |
-| 3 | Login with invalid credentials | ✅ |
-| 4 | Logout | ✅ |
-| 5 | Register with existing email | ✅ |
-| 6 | Contact Us form | ✅ |
-| 7 | Verify all products & product detail page | ✅ |
-| 8 | Search for a product | ✅ |
-| 9 | Subscribe via footer (home page) | ✅ |
-| 10 | Add products to cart | ✅ |
-| 11 | Remove products from cart | ✅ |
-| 12 | Place order (register at checkout) | ✅ |
-| 13 | Place order (login before checkout) | ✅ |
-| 14 | View & verify category products | ✅ |
-| 15 | Verify brand product pages | ✅ |
+| # | Test Case | Module | Status |
+|---|---|---|---|
+| TC001 | Login with valid credentials | Auth | ✅ |
+| TC002 | Login with invalid credentials | Auth | ✅ |
+| TC003 | Register new user, delete & verify deletion | Auth | ✅ |
+| TC004 | Logout successfully | Auth | ✅ |
+| TC005 | Search for a product (data-driven) | Products | ✅ |
+| TC006 | View product details | Products | ⬜ In Progress |
+| TC007 | Add product to cart | Cart | ⬜ In Progress |
+| TC008 | Remove product from cart | Cart | ⬜ In Progress |
+| TC009 | Place order (login before checkout) | Checkout | ⬜ In Progress |
+| TC010 | Contact Us form | UI | ⬜ In Progress |
 
-### ✅ API Test Cases
+### 🔌 API Test Cases
 
 | # | Endpoint | Method | Status |
 |---|---|---|---|
-| 1 | Get all products | GET | ✅ |
-| 2 | Search product | POST | ✅ |
-| 3 | Verify login (valid) | POST | ✅ |
-| 4 | Verify login (invalid) | POST | ✅ |
-| 5 | Create account | POST | ✅ |
-| 6 | Delete account | DELETE | ✅ |
+| 1 | Get all products | GET | ⬜ In Progress |
+| 2 | Search product | POST | ⬜ In Progress |
+| 3 | Verify login (valid) | POST | ⬜ In Progress |
+| 4 | Verify login (invalid) | POST | ⬜ In Progress |
+| 5 | Create account | POST | ⬜ In Progress |
+| 6 | Delete account | DELETE | ⬜ In Progress |
 
 ---
 
@@ -103,7 +137,7 @@ playwright-automation-exercise/
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/YOUR_USERNAME/playwright-automation-exercise.git
+git clone https://github.com/lakshmisoujanyasouji-oss/playwright-automation-exercise.git
 cd playwright-automation-exercise
 
 # 2. Install dependencies
@@ -121,7 +155,6 @@ cp .env.example .env
 ```
 TEST_EMAIL=your_test_email@example.com
 TEST_PASSWORD=your_test_password
-BASE_URL=https://automationexercise.com
 ```
 
 ---
@@ -132,8 +165,9 @@ BASE_URL=https://automationexercise.com
 # Run all tests
 npx playwright test
 
-# Run tests in headed mode (visible browser)
-npx playwright test --headed
+# Run a specific module
+npx playwright test tests/auth/
+npx playwright test tests/products/
 
 # Run a specific test file
 npx playwright test tests/auth/login.spec.ts
@@ -159,8 +193,8 @@ npx playwright show-report
 All page interactions are encapsulated in dedicated Page classes under `/pages`, keeping test files clean and maintainable.
 
 ```typescript
-// pages/LoginPage.ts
-import { Page, Locator } from '@playwright/test';
+// pages/loginPage.ts
+import { Page, Locator, expect } from '@playwright/test';
 
 export class LoginPage {
   readonly page: Page;
@@ -175,7 +209,11 @@ export class LoginPage {
     this.loginButton = page.locator('[data-qa="login-button"]');
   }
 
-  async login(email: string, password: string) {
+  async goto(): Promise<void> {
+    await this.page.goto('/login');
+  }
+
+  async login(email: string, password: string): Promise<void> {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
     await this.loginButton.click();
@@ -183,14 +221,51 @@ export class LoginPage {
 }
 ```
 
+### TypeScript Interface (IUser)
+
+Type-safe test data using interfaces ensures consistency across all test files:
+
+```typescript
+// interfaces/IUser.ts
+export interface IUser {
+  name: string;
+  email?: string;       // optional - auto generated
+  password: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  country: string;
+  state: string;
+  city: string;
+  zipcode: string;
+  mobile: string;
+}
+```
+
+### Data-Driven Testing with Fixtures
+
+```typescript
+// fixtures/products.json
+{
+  "searchTerms": ["Top", "Dress", "Jeans"]
+}
+
+// forEach automatically generates one test per search term
+searchData.searchTerms.forEach(term => {
+  test(`TC005 - Search for product: ${term}`, async ({ page }) => {
+    await productsPage.searchProduct(term);
+    await productsPage.expectResultsVisible(term);
+  });
+});
+```
+
 ---
 
 ## 🔄 CI/CD — GitHub Actions
 
-Tests run automatically on every `push` and `pull_request` to the `main` branch.
+Tests run automatically on every `push` and `pull_request` to the `main` branch. The pipeline runs on all three browsers (Chromium, Firefox, WebKit) in headless mode.
 
 ```yaml
-# .github/workflows/playwright.yml
 name: Playwright Tests
 on:
   push:
@@ -243,9 +318,9 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## 👤 Author
 
-**[Soujanya]**
-- LinkedIn: [linkedin.com/in/yourprofile](https://www.linkedin.com/in/lakshmisoujanya/)
-- GitHub: [github.com/yourusername](https://github.com/yourusername)
+**Lakshmi Soujanya**
+- LinkedIn: [linkedin.com/in/lakshmisoujanya](https://www.linkedin.com/in/lakshmisoujanya/)
+- GitHub: [github.com/lakshmisoujanyasouji-oss](https://github.com/lakshmisoujanyasouji-oss)
 
 ---
 

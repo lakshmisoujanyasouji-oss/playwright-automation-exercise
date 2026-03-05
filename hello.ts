@@ -97,20 +97,42 @@
 // p1.greet();
 
 
-class dalRecipe{
-  ingredients: string;
-  spice: string;
-  cookingTime: number;
+// class dalRecipe{
+//   ingredients: string;
+//   spice: string;
+//   cookingTime: number;
 
-  constructor(ingredients: string, spice: string, cookingTime: number){
-    this.ingredients = ingredients;
-    this.spice = spice;
-    this.cookingTime = cookingTime;
-  }
-  cook(){
-    console.log("todays cooking main ingredient is  " +this.ingredients, "dal");
-  }
-}
-   const mondaydal = new dalRecipe("tomato","cumin",30);
-   const tuesdaydal = new dalRecipe("spinach","cumin",70);
+//   constructor(ingredients: string, spice: string, cookingTime: number){
+//     this.ingredients = ingredients;
+//     this.spice = spice;
+//     this.cookingTime = cookingTime;
+//   }
+//   cook(){
+//     console.log("todays cooking main ingredient is  " +this.ingredients, "dal");
+//   }
+// }
+//    const mondaydal = new dalRecipe("tomato","cumin",30);
+//    const tuesdaydal = new dalRecipe("spinach","cumin",70);
+
+
+   //inheritance 
+
+
+   class Company
+   {
+    salary() : void
+    {
+    console.log("My company has good salaries");
+    }
+   }
+   class Tester extends Company
+   {
+      work() : void
+      {
+        console.log("Same way We have the same workload");
+      }
+    }
+   const e = new Tester();
+   e.salary();
+   e.work();
   

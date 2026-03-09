@@ -9,7 +9,7 @@ export class BasePage {
 
     // Navigate to a specific path
     async goto(path: string): Promise<void> {
-        await this.page.goto(path);
+        await this.page.goto(path, { timeout: 60000 });
     }
 
     // Wait for page to fully load

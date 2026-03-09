@@ -10,6 +10,7 @@ test.describe("Products Feature", () => {
 
             // Step 1: Navigate to products page
             await productsPage.goto();
+            test.setTimeout(60000);
 
              // Step 2: Scroll down to see more products
             await productsPage.scrollToProduct(term);

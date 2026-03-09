@@ -118,22 +118,58 @@
    //inheritance 
 
 
-   class Company
-   {
-    getSalary() : number
-    {
-    console.log("My company has good salaries");
-    return 70000;
-    }
-   }
-   class Tester extends Company
-   {
-      work() : void
-      {
-        console.log("Same way We have the same workload");
-      }
-    }
-   const e = new Tester();
-   e.getSalary();
-   e.work();
+  //  class Company
+  //  {
+  //   getSalary() : number
+  //   {
+  //   console.log("My company has good salaries");
+  //   return 70000;
+  //   }
+  //  }
+  //  class Tester extends Company
+  //  {
+  //     work() : void
+  //     {
+  //       console.log("Same way We have the same workload");
+  //     }
+  //   }
+  //  const e = new Tester();
+  //  e.getSalary();
+  //  e.work();
   
+
+
+
+  
+const sentence = "I love my amma amma is the best amma in the world";
+
+
+const words = sentence.toLowerCase().split(" ");
+// Result: ["i", "love", "my", "amma", "amma", "is", "the", "best", "amma", "in", "the", "world"]
+
+// Step 2: Create an object to store word counts
+const wordCount: { [key: string]: number } = {};
+
+// Step 3: Count each word using forEach
+words.forEach((word) => {
+  if (wordCount[word]) {
+    // Word already exists, increase count
+    wordCount[word] = wordCount[word] + 1;
+  } else {
+    // Word seen for first time, set count to 1
+    wordCount[word] = 1;
+  }
+});
+
+// Step 4: Display the results
+console.log("Word counts:");
+console.log(wordCount);
+
+// Step 5: Show only repeated words (count > 1)
+console.log("\nRepeated words:");
+Object.keys(wordCount).forEach((word) => {
+  if (wordCount[word] > 1) {
+    console.log(`"${word}" appears ${wordCount[word]} times`);
+  }
+});
+

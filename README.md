@@ -76,7 +76,8 @@ playwright-automation-exercise/
 │   │   └── products.spec.ts
 │   ├── cart/                   # Add to cart, remove (coming soon)
 │   ├── checkout/               # Order placement (coming soon)
-│   └── api/                    # API test cases (coming soon)
+│   └── api/ 
+          └── api.spec.ts                    # API test cases
 ├── pages/                      # Page Object Models (POM)
 │   ├── loginPage.ts
 │   ├── signupPage.ts
@@ -115,14 +116,15 @@ playwright-automation-exercise/
 
 ### 🔌 API Test Cases
 
-| # | Endpoint | Method | Status |
+| # | Test Case | Module | Status |
 |---|---|---|---|
-| 1 | Get all products | GET | ⬜ In Progress |
-| 2 | Search product | POST | ⬜ In Progress |
-| 3 | Verify login (valid) | POST | ⬜ In Progress |
-| 4 | Verify login (invalid) | POST | ⬜ In Progress |
-| 5 | Create account | POST | ⬜ In Progress |
-| 6 | Delete account | DELETE | ⬜ In Progress |
+
+| TC-API001 | GET All Products List | API | ✅ |
+| TC-API002 | POST All Products List (405) | API | ✅ |
+| TC-API003 | POST Search Product | API | ✅ |
+| TC-API004 | POST Verify Login valid | API | ✅ |
+| TC-API005 | POST Verify Login invalid | API | ✅ |
+| TC-API006 | DELETE Verify Login (405) | API | ✅ |
 
 ---
 

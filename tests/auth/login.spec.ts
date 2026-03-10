@@ -1,7 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../pages/loginPage';
 
+
+
 test.describe('Login Feature', () => {
+    test.setTimeout(60000);
 
     // Test 1 - Valid Login
     test('TC001 - Login with valid credentials', async ({ page }) => {

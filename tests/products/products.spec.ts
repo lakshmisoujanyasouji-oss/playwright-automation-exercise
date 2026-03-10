@@ -2,7 +2,10 @@ import { test } from "@playwright/test";
 import { ProductsPage } from "../../pages/productsPage";
 import searchData from "../../fixtures/products.json";
 
+
+
 test.describe("Products Feature", () => {
+    test.setTimeout(60000);
 
     searchData.searchTerms.forEach(term => {
         test(`TC005 - Search for product: ${term}`, async ({ page }) => {

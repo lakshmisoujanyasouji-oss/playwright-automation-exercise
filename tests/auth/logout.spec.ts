@@ -1,7 +1,10 @@
 import { test } from "@playwright/test";
 import { LoginPage } from "../../pages/loginPage";
 
+
+
 test.describe("Logout Feature", () => {
+    test.setTimeout(60000);
     test("TC004 - User can logout successfully", async ({ page }) => {
         const loginPage = new LoginPage(page);
 

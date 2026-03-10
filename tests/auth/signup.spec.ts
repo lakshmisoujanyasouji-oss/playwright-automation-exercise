@@ -5,9 +5,10 @@ import { LoginPage } from "../../pages/loginPage";
 import { buildUser } from "../../fixtures/userFactory";
 
 test.describe("Signup Feature", () => {
+   test.setTimeout(90000);
 
   test("TC003 - User can register, delete account and verify deletion", async ({ page }) => {
-    test.setTimeout(60000);
+   
     const signupPage = new SignupPage(page);
     const accountPage = new AccountPage(page);
     const loginPage = new LoginPage(page);

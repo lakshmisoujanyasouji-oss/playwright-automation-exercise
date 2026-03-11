@@ -87,7 +87,7 @@ export class SignupPage extends BasePage {
     await expect(this.accountCreatedMessage).toBeVisible();
   }
   async clickContinue(): Promise<void> {
-    await expect(this.continueButton).toBeVisible();
+    await expect(this.continueButton).toBeVisible({ timeout: 30000 });
     await this.continueButton.click();
 }
 }

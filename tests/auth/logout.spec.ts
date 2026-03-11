@@ -1,10 +1,9 @@
-import { test } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 import { LoginPage } from "../../pages/loginPage";
 
 
 
 test.describe("Logout Feature", () => {
-    test.setTimeout(60000);
     test("TC004 - User can logout successfully", async ({ page }) => {
         const loginPage = new LoginPage(page);
 
@@ -17,7 +16,7 @@ test.describe("Logout Feature", () => {
         );
 
         // Step 3: Verify logout button is visible (user is logged in)
-        await loginPage.logoutButton.waitFor({ state: 'visible' });
+        await expect(loginPage.logoutButton).toBeVisible();
 
         // Step 4: Logout
         await loginPage.logout();

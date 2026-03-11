@@ -9,7 +9,16 @@ const isCI = !!process.env.CI;
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: './tests',
+  testDir:
+
+    './tests',
+  // Global test timeout — all tests
+  timeout: 60000,
+
+  // Global assertion timeout — all expect()
+  expect: {
+    timeout: 10000
+  },
   /* Run tests in files in parallel */
   fullyParallel: false,
   workers: 1,
@@ -35,13 +44,19 @@ export default defineConfig({
 
     headless: isCI,
 
+    // Global navigation timeout — all page.goto()
+    navigationTimeout: 60000,
+
+    // Global action timeout — all clicks, fills
+    actionTimeout: 15000,
+
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
 
     // Auto screenshot on failure
     screenshot: 'only-on-failure',
 
-     // Auto video on failure
+    // Auto video on failure
     video: 'retain-on-failure',
   },
 

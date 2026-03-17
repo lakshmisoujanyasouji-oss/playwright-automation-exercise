@@ -6,7 +6,7 @@ import { LoginPage } from '../../pages/loginPage';
 test.describe('Login Feature', () => {
     
     // Test 1 - Valid Login
-    test('TC001 - Login with valid credentials', async ({ page }) => {
+    test('@smoke @regression TC001 - Login with valid credentials', async ({ page }) => {
         const loginPage = new LoginPage(page);
         await loginPage.goto();
         await loginPage.login(
@@ -19,7 +19,7 @@ test.describe('Login Feature', () => {
     });
 
     // Test 2 - Invalid Login
-    test('TC002 - Login with invalid credentials', async ({ page }) => {
+    test('@smoke @regression TC001 - Login with valid credentials', async ({ page }) => {
         const loginPage = new LoginPage(page);
         await loginPage.goto();
         await loginPage.login('invalid@gmail.com', 'wrongpassword');

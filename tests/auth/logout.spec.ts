@@ -4,7 +4,8 @@ import { LoginPage } from "../../pages/loginPage";
 
 
 test.describe("Logout Feature", () => {
-    test("TC004 - User can logout successfully", async ({ page }) => {
+    //TC004 - smoke and regression
+    test('@smoke @regression TC004 - User can logout successfully', async ({ page }) => {
         const loginPage = new LoginPage(page);
 
         // Step 1: Navigate to login page

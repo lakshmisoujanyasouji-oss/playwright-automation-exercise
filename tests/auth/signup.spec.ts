@@ -5,8 +5,8 @@ import { LoginPage } from "../../pages/loginPage";
 import { buildUser } from "../../fixtures/userFactory";
 
 test.describe("Signup Feature", () => {
-
-  test("TC003 - User can register, delete account and verify deletion", async ({ page }) => {
+  // TC003 - regression only (long running test)
+  test("@regression TC003 - User can register, delete account and verify deletion", async ({ page }) => {
 
     const signupPage = new SignupPage(page);
     const accountPage = new AccountPage(page);

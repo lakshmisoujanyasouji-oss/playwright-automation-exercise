@@ -5,7 +5,7 @@ const BASE_URL = 'https://automationexercise.com';
 test.describe('API Tests', () => {
 
     // TC-API001 - GET All Products List
-    test('TC-API001 - GET All Products List', async () => {
+    test('@api @regression TC-API001 - GET All Products List', async () => {
         const apiContext = await request.newContext();
         const response = await apiContext.get(`${BASE_URL}/api/productsList`);
 
@@ -26,7 +26,7 @@ test.describe('API Tests', () => {
     });
 
     // TC-API002 - POST To All Products List - Not Supported
-    test('TC-API002 - POST All Products List returns 405', async () => {
+    test('@api @regression TC-API002 - POST All Products List returns 405', async () => {
         const apiContext = await request.newContext();
         const response = await apiContext.post(`${BASE_URL}/api/productsList`);
 
@@ -38,7 +38,7 @@ test.describe('API Tests', () => {
     });
 
     // TC-API003 - POST Search Product
-    test('TC-API003 - POST Search Product returns results', async () => {
+    test('@api @regression TC-API003 - POST Search Product returns results', async () => {
         const apiContext = await request.newContext();
         const response = await apiContext.post(`${BASE_URL}/api/searchProduct`, {
             form: { search_product: 'top' }
@@ -53,7 +53,7 @@ test.describe('API Tests', () => {
     });
 
     // TC-API004 - POST Verify Login - Valid
-    test('TC-API004 - POST Verify Login with valid credentials', async () => {
+    test('@api @smoke @regression TC-API004 - POST Verify Login with valid credentials', async () => {
         const apiContext = await request.newContext();
         const response = await apiContext.post(`${BASE_URL}/api/verifyLogin`, {
             form: {
@@ -70,7 +70,7 @@ test.describe('API Tests', () => {
     });
 
     // TC-API005 - POST Verify Login - Invalid
-    test('TC-API005 - POST Verify Login with invalid credentials', async () => {
+    test('@api @regression TC-API005 - POST Verify Login with invalid credentials', async () => {
         const apiContext = await request.newContext();
         const response = await apiContext.post(`${BASE_URL}/api/verifyLogin`, {
             form: {
@@ -87,7 +87,7 @@ test.describe('API Tests', () => {
     });
 
     // TC-API006 - DELETE Verify Login - Not Supported
-    test('TC-API006 - DELETE Verify Login returns 405', async () => {
+    test('@api @regression TC-API006 - DELETE Verify Login returns 405', async () => {
         const apiContext = await request.newContext();
         const response = await apiContext.delete(`${BASE_URL}/api/verifyLogin`);
 

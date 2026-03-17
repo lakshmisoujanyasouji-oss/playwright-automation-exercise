@@ -17,7 +17,7 @@ test.describe('Database Tests', () => {
     });
 
     // TC-DB001 - Verify products table has data
-    test('TC-DB001 - Database should contain products', () => {
+    test('@db @regression TC-DB001 - Database should contain products', () => {
         const products = getAllProducts();
 
         // Verify products exist
@@ -34,7 +34,7 @@ test.describe('Database Tests', () => {
     });
 
     // TC-DB002 - Verify specific product exists in DB
-    test('TC-DB002 - Verify specific product data integrity', () => {
+    test('@db @regression TC-DB002 - Verify specific product data integrity', () => {
         const product = getProductByName('Blue Top');
 
         // Verify product exists
@@ -47,7 +47,7 @@ test.describe('Database Tests', () => {
     });
 
     // TC-DB003 - Verify product category data
-    test('TC-DB003 - Verify all products have valid categories', () => {
+    test('@db @regression TC-DB003 - Verify all products have valid categories', () => {
         const products = getAllProducts();
         const validCategories = ['Women', 'Men', 'Kids'];
 
@@ -59,7 +59,7 @@ test.describe('Database Tests', () => {
     });
 
     // TC-DB004 - Insert user and verify in DB
-    test('TC-DB004 - Insert user and verify record exists in DB', () => {
+    test('@db @smoke @regression TC-DB004 - Insert user and verify record exists in DB', () => {
         const testEmail = 'dbtest@playwright.com';
         const testName = 'DB Test User';
 
@@ -76,7 +76,7 @@ test.describe('Database Tests', () => {
     });
 
     // TC-DB005 - Delete user and verify removed from DB
-    test('TC-DB005 - Delete user and verify record removed from DB', () => {
+    test('@db @regression TC-DB005 - Delete user and verify record removed from DB', () => {
         const testEmail = 'dbtest@playwright.com';
 
         // Delete user
@@ -90,7 +90,7 @@ test.describe('Database Tests', () => {
     });
 
     // TC-DB006 - Verify user does not exist before insert
-    test('TC-DB006 - Verify non-existent user returns undefined', () => {
+    test('@db @regression TC-DB006 - Verify non-existent user returns undefined', () => {
         const fakeEmail = 'nonexistent@test.com';
 
         const exists = userExists(fakeEmail);

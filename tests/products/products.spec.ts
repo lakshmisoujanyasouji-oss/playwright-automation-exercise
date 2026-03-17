@@ -8,7 +8,7 @@ test.describe("Products Feature", () => {
     test.setTimeout(60000);
 
     searchData.searchTerms.forEach(term => {
-        test(`TC005 - Search for product: ${term}`, async ({ page }) => {
+        test(`@regression TC005 - Search for product: ${term}`, async ({ page }) => {
             const productsPage = new ProductsPage(page);
 
             // Step 1: Navigate to products page

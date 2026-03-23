@@ -1,0 +1,17 @@
+$kind: http-request
+name: New Request
+url: https://jsonplaceholder.typicode.com/posts/1
+method: GET
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"verify the status code as 200\", function()\r
+
+      {\r
+
+      \    pm.response.to.have.status(200);\r
+
+      }\r
+
+      )"
+    language: text/javascript
+order: 1774065421392

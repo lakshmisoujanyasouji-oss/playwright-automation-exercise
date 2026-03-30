@@ -3,7 +3,7 @@
 ![Playwright](https://img.shields.io/badge/Playwright-TypeScript-blue?logo=playwright)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)
 ![Node](https://img.shields.io/badge/Node.js-18%2B-green?logo=node.js)
-![CI](https://img.shields.io/badge/CI-GitHub%20Actions-orange?logo=githubactions)
+[![CI](https://github.com/lakshmisoujanyasouji-oss/RDTSAutomation2026/actions/workflows/playwright.yml/badge.svg)](https://github.com/lakshmisoujanyasouji-oss/RDTSAutomation2026/actions/workflows/playwright.yml)
 ![AI](https://img.shields.io/badge/AI--Enhanced-Claude-purple?logo=anthropic)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 

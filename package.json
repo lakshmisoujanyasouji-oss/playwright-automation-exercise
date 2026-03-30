@@ -1,11 +1,25 @@
 {
-  "name": "rdtsautomation2026",
+  "name": "playwright-automation-framework",
   "version": "1.0.0",
-  "description": "",
+  "description": "Production-style Playwright and TypeScript automation framework with UI, API, CI/CD, and AI-assisted testing enhancements",
   "main": "index.js",
-  "scripts": {},
-  "keywords": [],
-  "author": "",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:api": "playwright test tests/api",
+    "report": "playwright show-report"
+  },
+  "keywords": [
+    "playwright",
+    "typescript",
+    "test automation",
+    "e2e testing",
+    "api testing",
+    "ci cd",
+    "ai testing"
+  ],
+  "author": "Lakshmi Soujanya",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {

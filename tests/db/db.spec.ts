@@ -1,8 +1,11 @@
 import { test, expect } from '@playwright/test';
 import {
     initializeDatabase,
+    closeDatabase,
     getAllProducts,
     getProductByName,
+    getProductsByCategory,
+    getProductById,
     insertUser,
     getUserByEmail,
     deleteUserByEmail,
@@ -11,42 +14,45 @@ import {
 
 test.describe('Database Tests', () => {
 
-    // Initialize DB before all tests
+    // ─── Setup & Teardown ──────────────────────────────────────────────────────
+
     test.beforeAll(() => {
         initializeDatabase();
     });
 
-    // TC-DB001 - Verify products table has data
-    test('@db @regression TC-DB001 - Database should contain products', () => {
+    test.afterAll(() => {
+        closeDatabase();
+    });
+
+    // ─── Product Tests ─────────────────────────────────────────────────────────
+
+    test('@db @regression TC-DB001 - Database should contain seeded products', () => {
         const products = getAllProducts();
 
-        // Verify products exist
         expect(products.length).toBeGreaterThan(0);
 
-        // Verify product structure
-        const firstProduct = products[0];
-        expect(firstProduct.id).toBeDefined();
-        expect(firstProduct.name).toBeDefined();
-        expect(firstProduct.price).toBeDefined();
-        expect(firstProduct.category).toBeDefined();
+        // Verify product structure via TypeScript interface
+        const first = products[0];
+        expect(first).toBeDefined();
+        expect(first!.id).toBeDefined();
+        expect(first!.name).toBeDefined();
+        expect(first!.price).toBeDefined();
+        expect(first!.category).toBeDefined();
 
         console.log(`✅ Found ${products.length} products in database`);
     });
 
-    // TC-DB002 - Verify specific product exists in DB
     test('@db @regression TC-DB002 - Verify specific product data integrity', () => {
         const product = getProductByName('Blue Top');
 
-        // Verify product exists
         expect(product).toBeDefined();
-        expect(product.name).toBe('Blue Top');
-        expect(product.price).toBe('Rs. 500');
-        expect(product.category).toBe('Women');
+        expect(product!.name).toBe('Blue Top');
+        expect(product!.price).toBe('Rs. 500');
+        expect(product!.category).toBe('Women');
 
-        console.log(`✅ Product verified: ${product.name} - ${product.price}`);
+        console.log(`✅ Product verified: ${product!.name} — ${product!.price}`);
     });
 
-    // TC-DB003 - Verify product category data
     test('@db @regression TC-DB003 - Verify all products have valid categories', () => {
         const products = getAllProducts();
         const validCategories = ['Women', 'Men', 'Kids'];
@@ -58,45 +64,100 @@ test.describe('Database Tests', () => {
         console.log(`✅ All ${products.length} products have valid categories`);
     });
 
-    // TC-DB004 - Insert user and verify in DB
-    test('@db @smoke @regression TC-DB004 - Insert user and verify record exists in DB', () => {
-        const testEmail = 'dbtest@playwright.com';
-        const testName = 'DB Test User';
+    test('@db @regression TC-DB004 - Verify products can be queried by category', () => {
+        const womenProducts = getProductsByCategory('Women');
+        const menProducts = getProductsByCategory('Men');
 
-        // Insert user
-        insertUser(testName, testEmail);
+        expect(womenProducts.length).toBeGreaterThan(0);
+        expect(menProducts.length).toBeGreaterThan(0);
 
-        // Verify user exists in DB
-        const user = getUserByEmail(testEmail);
-        expect(user).toBeDefined();
-        expect(user.email).toBe(testEmail);
-        expect(user.name).toBe(testName);
+        // Verify every result matches the queried category
+        womenProducts.forEach(p => expect(p.category).toBe('Women'));
+        menProducts.forEach(p => expect(p.category).toBe('Men'));
 
-        console.log(`✅ User inserted and verified: ${user.email}`);
+        console.log(`✅ Women: ${womenProducts.length} products, Men: ${menProducts.length} products`);
     });
 
-    // TC-DB005 - Delete user and verify removed from DB
-    test('@db @regression TC-DB005 - Delete user and verify record removed from DB', () => {
-        const testEmail = 'dbtest@playwright.com';
+    test('@db @regression TC-DB005 - Verify product can be queried by ID', () => {
+        const product = getProductById(1);
 
-        // Delete user
+        expect(product).toBeDefined();
+        expect(product!.id).toBe(1);
+        expect(product!.name).toBe('Blue Top');
+
+        console.log(`✅ Product by ID verified: ${product!.name}`);
+    });
+
+    test('@db @regression TC-DB006 - Verify non-existent product returns undefined', () => {
+        const product = getProductByName('Non Existent Product XYZ');
+
+        expect(product).toBeUndefined();
+
+        console.log(`✅ Non-existent product correctly returns undefined`);
+    });
+
+    // ─── User Tests ────────────────────────────────────────────────────────────
+
+    test('@db @smoke @regression TC-DB007 - Insert user and verify record exists in DB', () => {
+        const testEmail = `tc007_${Date.now()}@playwright.com`;
+        const testName = 'DB Test User TC007';
+
+        // Clean up first to ensure independence
         deleteUserByEmail(testEmail);
 
-        // Verify user no longer exists
-        const exists = userExists(testEmail);
-        expect(exists).toBe(false);
+        // Insert and verify
+        insertUser(testName, testEmail);
 
-        console.log(`✅ User deleted and verified removed from DB`);
+        const user = getUserByEmail(testEmail);
+        expect(user).toBeDefined();
+        expect(user!.email).toBe(testEmail);
+        expect(user!.name).toBe(testName);
+
+        // Cleanup after test
+        deleteUserByEmail(testEmail);
+
+        console.log(`✅ User inserted and verified: ${testEmail}`);
     });
 
-    // TC-DB006 - Verify user does not exist before insert
-    test('@db @regression TC-DB006 - Verify non-existent user returns undefined', () => {
-        const fakeEmail = 'nonexistent@test.com';
+    test('@db @regression TC-DB008 - Delete user and verify record removed from DB', () => {
+        const testEmail = `tc008_${Date.now()}@playwright.com`;
+        const testName = 'DB Test User TC008';
+
+        // Setup — insert first
+        insertUser(testName, testEmail);
+        expect(userExists(testEmail)).toBe(true);
+
+        // Delete and verify
+        deleteUserByEmail(testEmail);
+        expect(userExists(testEmail)).toBe(false);
+
+        console.log(`✅ User deleted and verified removed: ${testEmail}`);
+    });
+
+    test('@db @regression TC-DB009 - Verify non-existent user returns false', () => {
+        const fakeEmail = 'nonexistent_xyz_123@test.com';
 
         const exists = userExists(fakeEmail);
         expect(exists).toBe(false);
 
         console.log(`✅ Non-existent user correctly returns false`);
+    });
+
+    test('@db @regression TC-DB010 - Verify duplicate email is handled gracefully', () => {
+        const testEmail = `tc010_${Date.now()}@playwright.com`;
+        const testName = 'Duplicate User Test';
+
+        // Insert once
+        insertUser(testName, testEmail);
+        expect(userExists(testEmail)).toBe(true);
+
+        // Insert again — should not throw (INSERT OR IGNORE)
+        expect(() => insertUser(testName, testEmail)).not.toThrow();
+
+        // Cleanup
+        deleteUserByEmail(testEmail);
+
+        console.log(`✅ Duplicate email handled gracefully via INSERT OR IGNORE`);
     });
 
 });

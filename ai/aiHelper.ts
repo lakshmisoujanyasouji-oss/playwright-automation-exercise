@@ -11,10 +11,10 @@ const client = new Anthropic({
 });
 
 // Core function to call Claude API
-export async function askClaude(prompt: string): Promise<string> {
+export async function askClaude(prompt: string, maxTokens: number = 1024): Promise<string> {
     const message = await client.messages.create({
-        model: 'claude-opus-4-5',
-        max_tokens: 1024,
+        model: 'claude-sonnet-4-5',
+        max_tokens: maxTokens,
         messages: [
             {
                 role: 'user',
@@ -29,7 +29,7 @@ export async function askClaude(prompt: string): Promise<string> {
     }
 
     // Extract text from response
-    const content = message.content?.[0];
+    const content = message.content[0];
     if (!content) {
         throw new Error('Empty content from Claude API');
     }

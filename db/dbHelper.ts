@@ -1,16 +1,45 @@
 import Database from 'better-sqlite3';
 import path from 'path';
 
-// Database file location
+// ─── Database Path ─────────────────────────────────────────────────────────────
 const DB_PATH = path.join(__dirname, 'testdata.db');
 
-// Create and initialize database
-export function getDatabase(): Database.Database {
-    const db = new Database(DB_PATH);
-    return db;
+// ─── Interfaces ────────────────────────────────────────────────────────────────
+export interface Product {
+    id: number;
+    name: string;
+    price: string;
+    category: string;
 }
 
-// Initialize tables - run once before tests
+export interface User {
+    id: number;
+    name: string;
+    email: string;
+    created_at: string;
+}
+
+// ─── Connection ────────────────────────────────────────────────────────────────
+
+// Single shared connection for the session
+let _db: Database.Database | null = null;
+
+export function getDatabase(): Database.Database {
+    if (!_db || !_db.open) {
+        _db = new Database(DB_PATH);
+    }
+    return _db;
+}
+
+export function closeDatabase(): void {
+    if (_db && _db.open) {
+        _db.close();
+        _db = null;
+    }
+}
+
+// ─── Initialization ────────────────────────────────────────────────────────────
+
 export function initializeDatabase(): void {
     const db = getDatabase();
 
@@ -34,9 +63,9 @@ export function initializeDatabase(): void {
         )
     `);
 
-    // Seed products data if empty
+    // Seed products if empty
     const count = db.prepare('SELECT COUNT(*) as count FROM products').get() as { count: number };
-    
+
     if (count.count === 0) {
         const insert = db.prepare(
             'INSERT INTO products (id, name, price, category) VALUES (?, ?, ?, ?)'
@@ -47,50 +76,52 @@ export function initializeDatabase(): void {
         insert.run(4, 'Stylish Dress', 'Rs. 1500', 'Women');
         insert.run(5, 'Winter Top', 'Rs. 600', 'Women');
     }
-
-    db.close();
 }
 
-// Get all products from DB
-export function getAllProducts(): any[] {
+// ─── Product Queries ───────────────────────────────────────────────────────────
+
+export function getAllProducts(): Product[] {
     const db = getDatabase();
-    const products = db.prepare('SELECT * FROM products').all();
-    db.close();
-    return products;
+    return db.prepare('SELECT * FROM products').all() as Product[];
 }
 
-// Get product by name
-export function getProductByName(name: string): any {
+export function getProductByName(name: string): Product | undefined {
     const db = getDatabase();
-    const product = db.prepare('SELECT * FROM products WHERE name = ?').get(name);
-    db.close();
-    return product;
+    return db.prepare('SELECT * FROM products WHERE name = ?').get(name) as Product | undefined;
 }
 
-// Insert user into DB
+export function getProductsByCategory(category: string): Product[] {
+    const db = getDatabase();
+    return db.prepare('SELECT * FROM products WHERE category = ?').all(category) as Product[];
+}
+
+export function getProductById(id: number): Product | undefined {
+    const db = getDatabase();
+    return db.prepare('SELECT * FROM products WHERE id = ?').get(id) as Product | undefined;
+}
+
+// ─── User Queries ──────────────────────────────────────────────────────────────
+
 export function insertUser(name: string, email: string): void {
     const db = getDatabase();
     db.prepare('INSERT OR IGNORE INTO users (name, email) VALUES (?, ?)').run(name, email);
-    db.close();
 }
 
-// Get user by email
-export function getUserByEmail(email: string): any {
+export function getUserByEmail(email: string): User | undefined {
     const db = getDatabase();
-    const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
-    db.close();
-    return user;
+    return db.prepare('SELECT * FROM users WHERE email = ?').get(email) as User | undefined;
 }
 
-// Delete user by email
 export function deleteUserByEmail(email: string): void {
     const db = getDatabase();
     db.prepare('DELETE FROM users WHERE email = ?').run(email);
-    db.close();
 }
 
-// Check if user exists
 export function userExists(email: string): boolean {
-    const user = getUserByEmail(email);
-    return user !== undefined;
+    return getUserByEmail(email) !== undefined;
+}
+
+export function getAllUsers(): User[] {
+    const db = getDatabase();
+    return db.prepare('SELECT * FROM users').all() as User[];
 }

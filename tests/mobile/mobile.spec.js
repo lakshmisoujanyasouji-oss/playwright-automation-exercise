@@ -16,10 +16,10 @@ test.describe('Mobile Emulation Tests', () => {
         const page = await context.newPage();
 
         // Navigate to our test site
-        await page.goto('https://www.automationexercise.com');
+        await page.goto('https://www.automationexercise.com', { timeout: 60000 });
 
         // Verify page loads correctly on mobile
-        await expect(page).toHaveTitle(/Automation Exercise/);
+        await expect(page).toHaveTitle(/Automation Exercise/, { timeout: 30000 });
 
         // Verify viewport is mobile size
         const viewport = page.viewportSize();

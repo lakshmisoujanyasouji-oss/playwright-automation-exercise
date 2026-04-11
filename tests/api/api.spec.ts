@@ -1,4 +1,5 @@
-import { test, expect, request } from '@playwright/test';
+//import { test, expect, request } from '@playwright/test';
+import { test, expect, request } from '../../fixtures/index';
 
 const BASE_URL = 'https://automationexercise.com';
 

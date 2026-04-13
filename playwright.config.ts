@@ -10,6 +10,10 @@ const isCI = !!process.env.CI;
 export default defineConfig({
   testDir: './tests',
 
+  // Global setup & teardown
+  globalSetup: './global-setup.ts',
+  globalTeardown: './global-teardown.ts',
+
   // Global test timeout
   timeout: 60000,
 

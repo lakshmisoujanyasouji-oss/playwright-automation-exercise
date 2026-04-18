@@ -33,10 +33,20 @@ export default defineConfig({
   retries: isCI ? 1 : 0,
 
   // Reporters
-  reporter: [
-    ['html'],
-    ['./ai/aiReporter.ts']
-  ],
+  reporter: isCI
+    ? [
+        ['github'],              // CI annotations
+        ['html', { outputFolder: 'playwright-report', open: 'never' }],
+        ['junit', { outputFile: 'test-results/junit-report.xml' }],
+        ['json', { outputFile: 'test-results/results.json' }],
+        ['./ai/aiReporter.ts']
+      ]
+    : [
+        ['html', { outputFolder: 'playwright-report', open: 'never' }],
+        ['list'],
+        ['json', { outputFile: 'test-results/results.json' }],
+        ['./ai/aiReporter.ts']
+      ],
 
   use: {
     baseURL: 'https://www.automationexercise.com',

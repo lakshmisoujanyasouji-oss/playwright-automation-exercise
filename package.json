@@ -7,18 +7,19 @@
     "npm": ">=9.0.0"
   },
   "scripts": {
-    "test":          "npx playwright test",
-    "test:headed":   "npx playwright test --headed",
-    "test:smoke":    "npx playwright test --grep @smoke",
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:smoke": "npx playwright test --grep @smoke",
     "test:regression": "npx playwright test --grep @regression",
-    "test:ui":       "npx playwright test tests/auth/ tests/products/",
-    "test:api":      "npx playwright test tests/api/api.spec.ts",
-    "test:db":       "npx playwright test tests/db/",
-    "test:mock":     "npx playwright test tests/api/apiMock.spec.ts",
-    "test:debug":    "npx playwright test --debug",
-    "test:ci":       "npx playwright test --reporter=github",
-    "test:ai":       "npx ts-node --project tsconfig.json ai/testAI.ts",
-    "report":        "npx playwright show-report"
+    "test:ui": "npx playwright test tests/auth/ tests/products/",
+    "test:api": "npx playwright test tests/api/api.spec.ts",
+    "test:db": "npx playwright test tests/db/",
+    "test:mock": "npx playwright test tests/api/apiMock.spec.ts",
+    "test:debug": "npx playwright test --debug",
+    "test:ci": "npx playwright test --reporter=github",
+    "test:ai": "npx ts-node --project tsconfig.json ai/testAI.ts",
+    "report": "npx playwright show-report",
+    "report:json": "cat test-results/results.json"
   },
   "keywords": [
     "playwright",
@@ -42,6 +43,7 @@
     "@playwright/test": "^1.58.2",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^25.3.3",
+    "allure-playwright": "^3.7.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }

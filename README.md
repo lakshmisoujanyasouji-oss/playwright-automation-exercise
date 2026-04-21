@@ -22,33 +22,45 @@ Target application: [AutomationExercise.com](https://automationexercise.com) —
 ## 🏗️ Framework Architecture
 
 ```
-┌─────────────────────────────────────────────────────┐
-│               Test Layer (*.spec.ts)                │
-│    UI Tests │ API Tests │ DB Tests │ Mock Tests      │
-└────────────────────────┬────────────────────────────┘
-                         ↓
-┌─────────────────────────────────────────────────────┐
-│           Page Object Model (pages/)                │
-│   BasePage │ LoginPage │ SignupPage │ ProductsPage   │
-└────────────────────────┬────────────────────────────┘
-                         ↓
-┌─────────────────────────────────────────────────────┐
-│        Fixtures │ Interfaces │ Utils │ DB Layer      │
-│   userFactory │ IUser │ dbHelper │ testdata.db       │
-└────────────────────────┬────────────────────────────┘
-                         ↓
-┌─────────────────────────────────────────────────────┐
-│              Playwright Engine                      │
-└────────────────────────┬────────────────────────────┘
-                         ↓
-┌─────────────────────────────────────────────────────┐
-│         AI Reporting Layer (ai/)                    │
-│  aiReporter │ reportSummariser │ failureAnalyser     │
-└────────────────────────┬────────────────────────────┘
-                         ↓
-┌─────────────────────────────────────────────────────┐
-│           CI/CD Pipeline (GitHub Actions)           │
-└─────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                     Global Setup                            │
+│     Env validation │ DB initialization │ Data seeding       │
+└────────────────────────────┬────────────────────────────────┘
+                             ↓
+┌─────────────────────────────────────────────────────────────┐
+│               Test Layer (*.spec.ts)                        │
+│    UI Tests │ API Tests │ DB Tests │ Mock Tests              │
+└────────────────────────────┬────────────────────────────────┘
+                             ↓
+┌─────────────────────────────────────────────────────────────┐
+│             Page Object Model (pages/)                      │
+│ BasePage │ LoginPage │ SignupPage │ CartPage │ CheckoutPage  │
+└────────────────────────────┬────────────────────────────────┘
+                             ↓
+┌─────────────────────────────────────────────────────────────┐
+│      Fixtures │ Interfaces │ Utils │ DB Layer                │
+│  fixtures/index.ts │ IUser │ ApiHelper │ dbHelper            │
+└────────────────────────────┬────────────────────────────────┘
+                             ↓
+┌─────────────────────────────────────────────────────────────┐
+│                  Playwright Engine                          │
+│   playwright.config.ts │ Multi-reporter │ Global timeouts   │
+└────────────────────────────┬────────────────────────────────┘
+                             ↓
+┌─────────────────────────────────────────────────────────────┐
+│              AI Reporting Layer (ai/)                       │
+│    aiReporter │ failureAnalyser │ reportSummariser           │
+└────────────────────────────┬────────────────────────────────┘
+                             ↓
+┌─────────────────────────────────────────────────────────────┐
+│                    Global Teardown                          │
+│     Test user cleanup │ DB connection close │ Run logging   │
+└────────────────────────────┬────────────────────────────────┘
+                             ↓
+┌─────────────────────────────────────────────────────────────┐
+│              CI/CD Pipeline (GitHub Actions)                │
+│      HTML │ JSON │ JUnit reporters │ Artifact upload        │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -60,32 +72,34 @@ Target application: [AutomationExercise.com](https://automationexercise.com) —
 | [Playwright](https://playwright.dev/) | UI & API browser automation |
 | [TypeScript](https://www.typescriptlang.org/) | Strongly-typed test design |
 | [Node.js](https://nodejs.org/) | Runtime environment |
-| [SQLite](https://www.sqlite.org/) | Embedded database for DB testing |
-| [Anthropic Claude](https://www.anthropic.com/) | AI-powered test reporting, failure analysis & data generation |
+| [SQLite + better-sqlite3](https://www.sqlite.org/) | Embedded database for DB testing |
+| [Anthropic Claude](https://www.anthropic.com/) | AI-powered reporting, failure analysis & data generation |
 | [GitHub Actions](https://github.com/features/actions) | CI/CD pipeline |
 | [dotenv](https://www.npmjs.com/package/dotenv) | Environment variable management |
+| [ts-node](https://typestrong.org/ts-node/) | TypeScript execution for AI demo runner |
 | [Postman](https://www.postman.com/) | API collection management & manual testing |
-| [Playwright HTML Reporter](https://playwright.dev/docs/test-reporters) | Interactive test reporting |
 
 ---
 
 ## 🎯 Key Features
 
-- ✅ **Page Object Model (POM)** with a shared `BasePage` for reusable actions
-- ✅ **UI Testing** — Auth, Products, Cart, Checkout flows
+- ✅ **Page Object Model (POM)** with shared `BasePage` — OOP inheritance pattern
+- ✅ **Playwright Fixtures** — Dependency injection for all page objects
+- ✅ **Global Setup & Teardown** — Env validation, DB seeding, auto cleanup
+- ✅ **API Helper Class** — Typed HTTP wrapper with domain-specific methods
+- ✅ **UI Testing** — Auth, Products, Cart, Checkout flows (12 tests)
 - ✅ **API Testing** — REST API validation with positive and negative scenarios
-- ✅ **API Mock Testing** — Mocked API responses using Playwright's route interception
-- ✅ **Database Testing** — SQLite-based DB validation via `dbHelper.ts`
-- ✅ **AI Executive Summary** — Post-run AI report generated automatically via `onEnd()` hook
-- ✅ **AI Failure Analysis** — Intelligent root cause summaries for test failures
-- ✅ **Test Case Generation** — AI-assisted test case suggestions
-- ✅ **Test Data Generation** — Dynamic data generation via AI
+- ✅ **API Mock Testing** — Route interception using Playwright's built-in network mocking
+- ✅ **Database Testing** — SQLite CRUD validation (10 tests)
+- ✅ **AI Executive Summary** — Post-run AI report via `onEnd()` hook
+- ✅ **AI Failure Analysis** — Root cause analysis per failed test
+- ✅ **AI Test Case Generator** — Structured JSON + TXT from page descriptions
+- ✅ **AI Test Data Generator** — Users, products, addresses & bulk data
 - ✅ **Data-Driven Testing** — JSON fixtures + dynamic `userFactory`
 - ✅ **TypeScript Interfaces** — Type-safe test data contracts
-- ✅ **Cross-Browser Testing** — Chromium, Firefox, WebKit
-- ✅ **CI/CD Pipeline** — Automated runs on every push/PR via GitHub Actions
+- ✅ **Multi-Reporter Setup** — HTML, JSON, JUnit, AI reporter
+- ✅ **CI/CD Pipeline** — GitHub Actions on every push/PR
 - ✅ **Retry, Trace, Screenshot & Video** on failure
-- ✅ **Postman Collections** — Parallel API collection for manual/exploratory testing
 - ✅ **Environment-Based Configuration** — `.env` driven credentials & config
 
 ---
@@ -96,63 +110,79 @@ Target application: [AutomationExercise.com](https://automationexercise.com) —
 RDTSAutomation2026/
 ├── .github/
 │   └── workflows/
-│       └── playwright.yml          # CI/CD pipeline
+│       └── playwright.yml           # CI/CD pipeline
 │
-├── ai/                             # AI-powered testing & reporting layer
-│   ├── aiHelper.ts                 # Shared AI utility / OpenAI wrapper
-│   ├── aiReporter.ts               # Custom Playwright reporter with AI summary
-│   ├── failureAnalyser.ts          # AI root cause analysis for failures
-│   ├── reportSummariser.ts         # Executive report summarisation
-│   ├── testAI.ts                   # AI module validation tests
-│   ├── testCaseGenerator.ts        # AI-assisted test case generation
-│   ├── testDataGenerator.ts        # AI-assisted test data generation
-│   └── index.ts                    # Barrel exports
+├── ai/                              # AI-powered testing & reporting layer
+│   ├── aiHelper.ts                  # Claude API wrapper
+│   ├── aiReporter.ts                # Custom Playwright reporter
+│   ├── failureAnalyser.ts           # AI root cause analysis per failure
+│   ├── reportSummariser.ts          # AI executive summary generation
+│   ├── testAI.ts                    # AI demo runner
+│   ├── testCaseGenerator.ts         # AI test case generation
+│   ├── testDataGenerator.ts         # AI test data generation
+│   └── index.ts                     # Barrel exports
 │
 ├── db/
-│   ├── dbHelper.ts                 # SQLite DB connection & query helpers
-│   └── testdata.db                 # SQLite test database
+│   ├── dbHelper.ts                  # SQLite connection, interfaces & CRUD helpers
+│   └── testdata.db                  # SQLite test database
 │
 ├── docs/
-│   ├── framework-architecture.md   # Architecture documentation
-│   ├── playwright-report.png       # Sample report screenshot
-│   └── test-strategy.md            # Test strategy document
+│   ├── ci-pipeline-green.png        # CI evidence screenshot
+│   ├── framework-architecture.md    # Architecture documentation
+│   ├── playwright-report.png        # Sample report screenshot
+│   └── test-strategy.md             # Test strategy document
 │
 ├── fixtures/
-│   ├── products.json               # Product search terms (data-driven)
-│   └── userFactory.ts              # Dynamic user data generator
+│   ├── index.ts                     # Custom test with injected page fixtures
+│   ├── products.json                # Product search terms (data-driven)
+│   └── userFactory.ts               # Dynamic user data generator
 │
 ├── interfaces/
-│   └── IUser.ts                    # TypeScript interface for user data
+│   └── IUser.ts                     # TypeScript interface for user data
 │
-├── pages/                          # Page Object Models
-│   ├── BasePage.ts                 # Shared base class for all pages
+├── pages/                           # Page Object Models
+│   ├── BasePage.ts                  # Shared base class — OOP inheritance
 │   ├── loginPage.ts
 │   ├── signupPage.ts
 │   ├── accountPage.ts
-│   └── productsPage.ts
+│   ├── productsPage.ts
+│   ├── cartPage.ts
+│   └── checkoutPage.ts
 │
-├── postman/                        # Postman collection files
+├── postman/                         # Postman collection files
 │
 ├── tests/
 │   ├── api/
-│   │   ├── api.spec.ts             # REST API test cases
-│   │   └── apiMock.spec.ts         # Mocked API scenarios
+│   │   ├── api.spec.ts              # REST API test cases
+│   │   └── apiMock.spec.ts          # Mocked API scenarios
 │   ├── auth/
 │   │   ├── login.spec.ts
 │   │   ├── logout.spec.ts
 │   │   └── signup.spec.ts
-│   ├── cart/                       # 🔲 In Progress
-│   ├── checkout/                   # 🔲 In Progress
+│   ├── cart/
+│   │   └── cart.spec.ts             # Cart test cases
+│   ├── checkout/
+│   │   └── checkout.spec.ts         # Checkout & order test cases
 │   ├── db/
-│   │   └── db.spec.ts              # Database test cases
+│   │   └── db.spec.ts               # Database test cases
 │   └── products/
 │       └── products.spec.ts
 │
-├── utils/                          # Shared helper utilities
-├── test-results/
-│   └── ai-summary.json             # AI-generated summary (auto-created post-run)
-├── .env.example                    # Environment variable template
-├── playwright.config.ts
+├── utils/                           # Shared helper utilities
+│   ├── apiHelper.ts                 # Typed HTTP wrapper class
+│   ├── dateHelper.ts                # Date formatting helpers
+│   ├── urlHelper.ts                 # URL assertion helpers
+│   ├── waitHelper.ts                # Custom wait utilities
+│   └── index.ts                     # Barrel exports
+│
+├── test-results/                    # Auto-generated after every run
+│   ├── ai-summary.json              # AI Executive Summary
+│   └── results.json                 # Machine-readable test results
+│
+├── global-setup.ts                  # Runs once before all tests
+├── global-teardown.ts               # Runs once after all tests
+├── .env.example                     # Environment variable template
+├── playwright.config.ts             # Playwright configuration
 ├── tsconfig.json
 └── README.md
 ```
@@ -161,43 +191,39 @@ RDTSAutomation2026/
 
 ## 🤖 AI Integration Layer
 
-This framework includes a custom AI-powered reporting and analysis layer — a key differentiator from standard automation frameworks.
-
-### ✅ All AI Modules Complete
-
-The full AI layer is built and working, powered by **Anthropic Claude** (`claude-sonnet-4-5`).
+This framework includes a custom AI-powered reporting and analysis layer — powered by **Anthropic Claude** (`claude-sonnet-4-5`).
 
 | Module | Purpose | Status |
 |---|---|---|
 | `aiHelper.ts` | Claude API wrapper with configurable token limits | ✅ |
-| `aiReporter.ts` | Custom Playwright reporter — hooks into `onEnd()` | ✅ |
+| `aiReporter.ts` | Custom reporter — hooks into `onEnd()` and `onTestEnd()` | ✅ |
 | `failureAnalyser.ts` | AI root cause analysis per failed test | ✅ |
 | `reportSummariser.ts` | Executive summary saved to `ai-summary.json` | ✅ |
 | `testCaseGenerator.ts` | Generates structured JSON + readable TXT test cases | ✅ |
 | `testDataGenerator.ts` | Generates users, products, addresses & bulk data | ✅ |
 | `index.ts` | Barrel exports for all functions and interfaces | ✅ |
 
-**AI Executive Summary** — printed to console and saved after every test run:
+**AI Executive Summary** — generated after every test run:
 
 ```
 🤖 AI EXECUTIVE TEST SUMMARY
-─────────────────────────────────────────
+============================================================
 Overall Status : PASSED
-Passed         : 20/20
+Passed         : 32/32
 Risk Level     : Low
 
 Summary:
-All test suites completed with a 100% pass rate. No critical failures detected.
+All 32 test cases executed successfully with a 100% pass rate.
 System is stable and ready for deployment.
 
 Key Findings:
-  → All authentication flows passed successfully
-  → API endpoints returning expected responses
-  → No performance degradation detected
+  → Perfect test execution with zero failures across all 32 scenarios
+  → No critical, major, or minor defects identified
+  → System functionality meets all acceptance criteria
 
 Recommendations:
-  → Continue monitoring checkout flow as coverage expands
-─────────────────────────────────────────
+  → Proceed with deployment to production environment
+============================================================
 ```
 
 **AI Failure Analysis** — triggered automatically per failed test:
@@ -207,19 +233,19 @@ Recommendations:
 ──────────────────────────────────────────────────
 Test: TC001 - Login with valid credentials
 📍 Root Cause    : Login redirect did not complete within timeout
-🔧 Suggested Fix : Increase waitForURL timeout or add explicit wait for nav
+🔧 Suggested Fix : Increase waitForURL timeout or add explicit wait
 ⚠️  Priority      : High
 ──────────────────────────────────────────────────
 ```
 
-**AI Test Case Generator** — saves structured JSON + readable TXT to `test-results/`:
+**AI Test Case Generator** — saves to `test-results/`:
 
 ```
 ai-testcases-login-page.json    ← structured, programmatically usable
 ai-testcases-login-page.txt     ← human readable
 ```
 
-**AI Test Data Generator** — generates contextual, unique test data:
+**AI Test Data Generator:**
 
 ```typescript
 const user    = await generateTestUser('New registration for e-commerce');
@@ -230,9 +256,9 @@ const users   = await generateBulkUsers(5, 'Load testing scenario');
 
 ---
 
-## 🧪 Test Coverage
+## 🧪 Test Coverage — 32 Tests | 100% Pass Rate
 
-### ✅ UI Tests
+### ✅ UI Tests (12)
 
 | # | Test Case | Module | Status |
 |---|---|---|---|
@@ -240,14 +266,17 @@ const users   = await generateBulkUsers(5, 'Load testing scenario');
 | TC002 | Login with invalid credentials | Auth | ✅ |
 | TC003 | Register new user, delete & verify deletion | Auth | ✅ |
 | TC004 | Logout successfully | Auth | ✅ |
-| TC005 | Search for a product (data-driven) | Products | ✅ |
-| TC006 | View product details | Products | 🔲 In Progress |
-| TC007 | Add product to cart | Cart | 🔲 In Progress |
-| TC008 | Remove product from cart | Cart | 🔲 In Progress |
-| TC009 | Place order (login before checkout) | Checkout | 🔲 In Progress |
-| TC010 | Contact Us form | UI | 🔲 In Progress |
+| TC005 | Search for a product (data-driven x3) | Products | ✅ |
+| TC007 | Add product to cart and verify | Cart | ✅ |
+| TC008 | Verify cart displays added product details | Cart | ✅ |
+| TC009 | Remove product from cart and verify empty | Cart | ✅ |
+| TC010 | Verify checkout button visible with items | Cart | ✅ |
+| TC011 | Verify checkout page displays address & order | Checkout | ✅ |
+| TC012 | Place order successfully with valid payment | Checkout | ✅ |
+| TC013 | Verify order comment field accepts input | Checkout | ✅ |
+| TC014 | Verify place order button visible | Checkout | ✅ |
 
-### 🔌 API Tests
+### 🔌 API Tests (7)
 
 | # | Test Case | Module | Status |
 |---|---|---|---|
@@ -257,9 +286,9 @@ const users   = await generateBulkUsers(5, 'Load testing scenario');
 | TC-API004 | POST Verify Login — valid credentials | API | ✅ |
 | TC-API005 | POST Verify Login — invalid credentials | API | ✅ |
 | TC-API006 | DELETE Verify Login (405 validation) | API | ✅ |
-| TC-API007 | Mocked API response — product list | API Mock | ✅ |
+| TC-MOCK001 | Mocked API response via route interception | API Mock | ✅ |
 
-### 🗄️ Database Tests
+### 🗄️ Database Tests (10)
 
 | # | Test Case | Module | Status |
 |---|---|---|---|
@@ -276,6 +305,112 @@ const users   = await generateBulkUsers(5, 'Load testing scenario');
 
 ---
 
+## 🏗️ Design Patterns & Engineering Decisions
+
+### 1. Playwright Fixtures — Dependency Injection
+
+All page objects are defined once and auto-injected into any test:
+
+```typescript
+// fixtures/index.ts — define once
+export const test = base.extend<PageFixtures>({
+    loginPage: async ({ page }, use) => {
+        await use(new LoginPage(page));
+    },
+    // authenticated fixture — handles login automatically
+    authenticatedPage: async ({ page }, use) => {
+        const loginPage = new LoginPage(page);
+        await loginPage.goto();
+        await loginPage.login(
+            process.env.TEST_EMAIL!,
+            process.env.TEST_PASSWORD!
+        );
+        await use(loginPage);
+    }
+});
+
+// In tests — clean, no boilerplate
+test('add to cart', async ({ cartPage, productsPage }) => {
+    await productsPage.addFirstProductToCart();
+    await cartPage.expectCartHasItems();
+});
+```
+
+### 2. BasePage Pattern — OOP Inheritance
+
+All page classes extend `BasePage` — demonstrating all 4 OOP principles:
+
+| Principle | Implementation |
+|---|---|
+| **Inheritance** | `LoginPage extends BasePage` |
+| **Encapsulation** | Locators are `readonly` — private to each page |
+| **Abstraction** | Tests call `login()` without knowing HOW it works |
+| **Polymorphism** | Each page overrides `goto()` with its own path |
+
+```typescript
+// pages/BasePage.ts — parent class
+export class BasePage {
+    constructor(protected page: Page) {}
+    async goto(path: string): Promise<void> { ... }
+    async waitForPageLoad(): Promise<void> { ... }
+    async takeScreenshot(name: string): Promise<void> { ... }
+}
+
+// pages/loginPage.ts — child class
+export class LoginPage extends BasePage {
+    constructor(page: Page) { super(page); }
+    async goto(): Promise<void> { await super.goto('/login'); }
+    async login(email: string, password: string): Promise<void> { ... }
+}
+```
+
+### 3. API Helper Class — Typed HTTP Wrapper
+
+```typescript
+// utils/apiHelper.ts
+export class ApiHelper {
+    async getAllProducts(): Promise<ApiResponse<ProductsResponse>> { ... }
+    async verifyLogin(email: string, password: string): Promise<ApiResponse<LoginResponse>> { ... }
+    async searchProduct(term: string): Promise<ApiResponse<ProductsResponse>> { ... }
+}
+
+// In tests — clean, typed, no noise
+test('TC-API001', async ({ request }) => {
+    const api = new ApiHelper(request);
+    const response = await api.getAllProducts();
+    expect(response.body.products.length).toBeGreaterThan(0);
+});
+```
+
+### 4. Global Setup & Teardown
+
+```
+// global-setup.ts — runs ONCE before all 32 tests
+✅ Verify TEST_EMAIL, TEST_PASSWORD, CLAUDE_API_KEY exist
+✅ Initialize SQLite database and seed test data
+✅ Log test run start time & environment info
+
+// global-teardown.ts — runs ONCE after all 32 tests
+✅ Clean up test users from database automatically
+✅ Close database connection properly
+✅ Log test run completion time
+```
+
+### 5. Data-Driven Testing
+
+```typescript
+// fixtures/products.json → { "searchTerms": ["Top", "Dress", "Jeans"] }
+
+searchData.searchTerms.forEach(term => {
+    test(`TC005 - Search for product: ${term}`, async ({ productsPage }) => {
+        await productsPage.searchProduct(term);
+        await productsPage.expectResultsVisible(term);
+    });
+});
+```
+
+---
+
 ## ⚙️ Setup & Installation
 
 ### Prerequisites
@@ -288,7 +423,7 @@ const users   = await generateBulkUsers(5, 'Load testing scenario');
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/lakshmisoujanyasouji-oss/playwright-automation-exercise.git
+git clone https://github.com/lakshmisoujanyasouji-oss/RDTSAutomation2026.git
 cd RDTSAutomation2026
 
 # 2. Install dependencies
@@ -315,114 +450,55 @@ CLAUDE_API_KEY=your_claude_api_key
 
 ```bash
 # Run all tests
-npx playwright test
+npm test
 
 # Run by module
-npx playwright test tests/auth/
-npx playwright test tests/api/
-npx playwright test tests/db/
-npx playwright test tests/products/
+npm run test:ui
+npm run test:api
+npm run test:mock
+npm run test:db
 
-# Run specific file
-npx playwright test tests/auth/login.spec.ts
+# Run by tags
+npm run test:smoke
+npm run test:regression
 
-# Run on specific browser
-npx playwright test --project=chromium
-npx playwright test --project=firefox
-npx playwright test --project=webkit
-
-# Run by test tags
-npx playwright test --grep @smoke
-npx playwright test --grep @regression
-npx playwright test --grep @api
-npx playwright test --grep @db
+# Run AI demo
+npm run test:ai
 
 # Run in debug mode
-npx playwright test --debug
+npm run test:debug
 
 # View HTML report
-npx playwright show-report
+npm run report
 ```
 
 ---
 
-## 🏗️ Design Patterns
+## 📊 Reporting
 
-### BasePage Pattern
+This framework uses a **multi-reporter setup**:
 
-All page objects extend `BasePage`, which encapsulates shared actions like navigation, waits, and common assertions — reducing duplication across the page layer.
+| Reporter | Output | Purpose |
+|---|---|---|
+| `html` | `playwright-report/` | Interactive visual report with trace viewer |
+| `json` | `test-results/results.json` | Machine-readable results |
+| `junit` | `test-results/junit-report.xml` | CI tool integration |
+| `github` | GitHub PR annotations | CI failure visibility |
+| `ai` | `test-results/ai-summary.json` | AI Executive Summary |
 
-```typescript
-// pages/BasePage.ts
-export class BasePage {
-  constructor(protected page: Page) {}
+```bash
+# View interactive HTML report
+npm run report
 
-  async navigateTo(path: string): Promise<void> {
-    await this.page.goto(path);
-  }
-
-  async waitForPageLoad(): Promise<void> {
-    await this.page.waitForLoadState('networkidle');
-  }
-}
-```
-
-### Page Object Model
-
-All page interactions are encapsulated in dedicated classes under `/pages`.
-
-```typescript
-// pages/loginPage.ts
-export class LoginPage extends BasePage {
-  readonly emailInput = this.page.locator('[data-qa="login-email"]');
-  readonly passwordInput = this.page.locator('[data-qa="login-password"]');
-  readonly loginButton = this.page.locator('[data-qa="login-button"]');
-
-  async login(email: string, password: string): Promise<void> {
-    await this.emailInput.fill(email);
-    await this.passwordInput.fill(password);
-    await this.loginButton.click();
-  }
-}
-```
-
-### TypeScript Interface
-
-```typescript
-// interfaces/IUser.ts
-export interface IUser {
-  name: string;
-  email?: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  address: string;
-  country: string;
-  state: string;
-  city: string;
-  zipcode: string;
-  mobile: string;
-}
-```
-
-### Data-Driven Testing
-
-```typescript
-// fixtures/products.json → { "searchTerms": ["Top", "Dress", "Jeans"] }
-
-searchData.searchTerms.forEach(term => {
-  test(`TC005 - Search for product: ${term}`, async ({ page }) => {
-    await productsPage.searchProduct(term);
-    await productsPage.expectResultsVisible(term);
-  });
-});
+# View JSON results
+npm run report:json
 ```
 
 ---
 
 ## 🔄 CI/CD — GitHub Actions
 
-Tests run automatically on every `push` and `pull_request` to `main`, across all three browsers in headless mode.
+Tests run automatically on every `push` and `pull_request` to `main`.
 
 ```yaml
 name: Playwright Tests
@@ -435,18 +511,23 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: lts/*
       - run: npm ci
       - run: npx playwright install --with-deps
       - run: npx playwright test
-      - uses: actions/upload-artifact@v3
+        env:
+          CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
           path: playwright-report/
+          retention-days: 30
 ```
 
 ---
@@ -465,9 +546,13 @@ The HTML report includes execution summary, screenshots on failure, trace viewer
 - [x] AI Test Case Generator (structured JSON output)
 - [x] AI Test Data Generator (user, product, address, bulk)
 - [x] Database testing layer (SQLite, 10 test cases)
-- [ ] Complete Cart & Checkout UI test coverage
-- [ ] Integrate Allure reporting
-- [ ] Add visual regression testing
+- [x] Cart & Checkout UI test coverage
+- [x] Playwright Fixtures — dependency injection
+- [x] API Helper Class — typed HTTP wrapper
+- [x] Global Setup & Teardown
+- [x] Multi-reporter setup (HTML, JSON, JUnit, AI)
+- [x] utils/index.ts & ai/index.ts barrel exports
+- [ ] Visual regression testing
 
 ---
 
@@ -485,7 +570,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## 👤 Author
 
-**Lakshmi Soujanya**
+**Lakshmi Soujanya Sanka**
 Senior Test Automation Engineer | Playwright • TypeScript • AI-Enhanced Testing
 
 - 🔗 LinkedIn: [linkedin.com/in/lakshmisoujanya](https://www.linkedin.com/in/lakshmisoujanya/)

@@ -1,5 +1,5 @@
 import { test, expect } from '../../fixtures/index';
-import { ApiHelper } from '../../utils/apiHelper';
+import { ApiHelper, waitForURL, expectURL } from '../../utils';
 
 test.describe('API Tests', () => {
 
